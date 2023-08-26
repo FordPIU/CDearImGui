@@ -1,0 +1,8 @@
+# ninja log v5
+5	632	7147417418434176	include/glad/glad.h	1efc48c93d052b9b
+5	632	7147417418434176	src/glad.c	1efc48c93d052b9b
+5	632	7147417418434176	D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/blds/glad/x86-windows-dbg/include/glad/glad.h	1efc48c93d052b9b
+5	632	7147417418434176	D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/blds/glad/x86-windows-dbg/src/glad.c	1efc48c93d052b9b
+636	828	7147417420649783	CMakeFiles/glad.dir/src/glad.c.obj	8a5301aaf28c3cfb
+832	876	7147417421121710	glad.lib	d8b3655fd66d18c9
+877	921	0	CMakeFiles/install.util	35894d5397407034

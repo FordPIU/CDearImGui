@@ -1,0 +1,13 @@
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/CMakeFiles/uninstall.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/CMakeFiles/edit_cache.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/CMakeFiles/rebuild_cache.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/CMakeFiles/list_install_components.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/CMakeFiles/install.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/CMakeFiles/install/local.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/src/CMakeFiles/update_mappings.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/src/CMakeFiles/glfw.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/src/CMakeFiles/edit_cache.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/src/CMakeFiles/rebuild_cache.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/src/CMakeFiles/list_install_components.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/src/CMakeFiles/install.dir
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/x64-windows/vcpkg/blds/glfw3/x64-windows-dbg/src/CMakeFiles/install/local.dir

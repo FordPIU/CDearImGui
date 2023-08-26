@@ -1,0 +1,3 @@
+D:\Github\CDearImGui\CDearImGui\x64\Debug\CDearImGui.exe
+D:\Github\CDearImGui\CDearImGui\x64\Debug\CDearImGui.vcxproj.CopyComplete
+D:\Github\CDearImGui\CDearImGui\x64\Debug\glfw3.dll

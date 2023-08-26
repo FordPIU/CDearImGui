@@ -1,0 +1,17 @@
+[1/4] cmd.exe /C "cd /D D:\Github\CDearImGui\CDearImGui\vcpkg_installed\vcpkg\blds\glad\src\708967e402-274d415499.clean && C:\Users\brodo\AppData\Local\vcpkg\downloads\tools\python\python-3.10.7-x86\python.exe -m glad --profile=compatibility --out-path=D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/blds/glad/x86-windows-rel --api= --generator=c --extensions= --spec=gl --reproducible"
+[08/26/2023 01:29:02][INFO	][glad   	]: reproducible build, using packaged specification: 'gl.xml'
+[08/26/2023 01:29:02][INFO	][glad.files	]: opening 'gl.xml' from packaged path
+[08/26/2023 01:29:02][INFO	][glad   	]: generating 'gl' bindings: {'gl': None}
+[08/26/2023 01:29:02][INFO	][glad.files	]: opening 'khrplatform.h' from packaged path
+[08/26/2023 01:29:02][INFO	][glad   	]: generating 'gl' bindings - done
+[2/4] C:\PROGRA~2\MICROS~2\2022\BUILDT~1\VC\Tools\MSVC\1437~1.328\bin\Hostx64\x86\cl.exe    -ID:\Github\CDearImGui\CDearImGui\vcpkg_installed\vcpkg\blds\glad\x86-windows-rel\include /nologo /DWIN32 /D_WINDOWS /W3 /utf-8 /MP  /MD /O2 /Oi /Gy /DNDEBUG /Z7 /showIncludes /FoCMakeFiles\glad.dir\src\glad.c.obj /FdCMakeFiles\glad.dir\glad.pdb /FS -c D:\Github\CDearImGui\CDearImGui\vcpkg_installed\vcpkg\blds\glad\x86-windows-rel\src\glad.c
+[3/4] cmd.exe /C "cd . && C:\PROGRA~2\MICROS~2\2022\BUILDT~1\VC\Tools\MSVC\1437~1.328\bin\Hostx64\x86\lib.exe  /machine:X86 /nologo /out:glad.lib CMakeFiles\glad.dir\src\glad.c.obj  && cd ."
+[3/4] cmd.exe /C "cd /D D:\Github\CDearImGui\CDearImGui\vcpkg_installed\vcpkg\blds\glad\x86-win-- Install configuration: "Release"
+-- Installing: D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glad_x86-windows/lib/glad.lib
+-- Installing: D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glad_x86-windows/include/glad/glad.h
+-- Installing: D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glad_x86-windows/include/KHR/khrplatform.h
+-- Installing: D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glad_x86-windows/lib/cmake/glad/gladConfig.cmake
+-- Installing: D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glad_x86-windows/lib/cmake/glad/gladConfigVersion.cmake
+-- Installing: D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glad_x86-windows/lib/cmake/glad/gladTargets.cmake
+-- Installing: D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glad_x86-windows/lib/cmake/glad/gladTargets-release.cmake
+dows-rel && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"

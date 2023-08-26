@@ -1,0 +1,19 @@
+# ninja log v5
+8	214	7147417448507480	src/CMakeFiles/glfw.dir/context.c.obj	68b84d381b47321a
+34	223	7147417448597966	src/CMakeFiles/glfw.dir/win32_thread.c.obj	bcf8bf56823d6e5e
+31	227	7147417448587909	src/CMakeFiles/glfw.dir/win32_time.c.obj	2279b5890eb51501
+23	230	7147417448602987	src/CMakeFiles/glfw.dir/win32_init.c.obj	83cba9e101b7cd9c
+44	233	7147417448673360	src/CMakeFiles/glfw.dir/osmesa_context.c.obj	512713d43d03bbad
+15	236	7147417448673360	src/CMakeFiles/glfw.dir/monitor.c.obj	27eca7cdf7c80aef
+18	239	7147417448678388	src/CMakeFiles/glfw.dir/vulkan.c.obj	74ed8f18cc58936
+20	242	7147417448688444	src/CMakeFiles/glfw.dir/window.c.obj	d2f7c1cc47c037f
+10	245	7147417448683421	src/CMakeFiles/glfw.dir/init.c.obj	bc935efc50ea0ae2
+13	248	7147417448703522	src/CMakeFiles/glfw.dir/input.c.obj	5c99e33138c72ea
+39	251	7147417448708548	src/CMakeFiles/glfw.dir/wgl_context.c.obj	5bd937655298c86c
+26	254	7147417448708548	src/CMakeFiles/glfw.dir/win32_joystick.c.obj	67d322190de7b569
+36	257	7147417448758814	src/CMakeFiles/glfw.dir/win32_window.c.obj	e03e81625e2832c7
+28	276	7147417449155918	src/CMakeFiles/glfw.dir/win32_monitor.c.obj	19a27c7f8de68d20
+42	279	7147417449170999	src/CMakeFiles/glfw.dir/egl_context.c.obj	1b7d9249959aa06b
+279	506	7147417451329061	src/glfw3.dll	c48dea3d55b8934
+279	506	7147417451329061	src/glfw3dll.lib	c48dea3d55b8934
+506	566	0	CMakeFiles/install.util	d0e680f62188bb43

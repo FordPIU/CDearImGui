@@ -1,0 +1,9 @@
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glfw3_x86-windows/lib/glfw3dll.lib
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glfw3_x86-windows/bin/glfw3.dll
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glfw3_x86-windows/include/GLFW/glfw3.h
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glfw3_x86-windows/include/GLFW/glfw3native.h
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glfw3_x86-windows/lib/cmake/glfw3/glfw3Config.cmake
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glfw3_x86-windows/lib/cmake/glfw3/glfw3ConfigVersion.cmake
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glfw3_x86-windows/lib/cmake/glfw3/glfw3Targets.cmake
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glfw3_x86-windows/lib/cmake/glfw3/glfw3Targets-release.cmake
+D:/Github/CDearImGui/CDearImGui/vcpkg_installed/vcpkg/pkgs/glfw3_x86-windows/lib/pkgconfig/glfw3.pc
