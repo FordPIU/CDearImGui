@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 
 # Project information
 project(CDearImGui 
-    VERSION 0.1
+    VERSION 0.2
     DESCRIPTION "A Server based approach to imgui, primarily for usage with FiveM."
     LANGUAGES C CXX
 )
