@@ -4,7 +4,8 @@
         "*.btjs": "javascript",
         "*.crconf": "crconf",
         "*.clua": "lua",
-        "glad.h": "c"
+        "glad.h": "c",
+        "algorithm": "cpp"
     },
     "dotnet.defaultSolution": "build/CDearImGui.sln"
 }

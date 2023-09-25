@@ -1,15 +1,10 @@
-#include "CImGui.h"
-#include "ServerList.h"
-
-#include <iostream>
-
-using namespace std;
-
-const int WindowHeight = 1;
-const int WindowWidth = 1;
+#include "ProcessManager.h"
 
 int main()
 {
+    ProcessManager proccess = ProcessManager::ProcessManager();
+    proccess.launch(1, 1, "Hello World!", 0, 0, rgbaVec(0.f, 0.f, 0.f, 0.f));
+    /*
     // Init GLFW to setup OpenGL
     InitGlfw();
 
@@ -101,4 +96,5 @@ int main()
     Cleanup(proccessWindow);
 
     return 0;
+    */
 }
