@@ -2,6 +2,41 @@
 #include "Timer.h"
 
 #include <windows.h>
+#include <vector>
+
+////////////////////////////////////////////////////////////
+
+class FrameStats
+{
+public:
+    FrameStats(int bufferSize) : bufferSize(bufferSize)
+    {
+        fpsBuffer.resize(bufferSize, 0.0);
+        renderTimeBuffer.resize(bufferSize, 0.0);
+    }
+
+    void Update(float renderTime, double currentFPS)
+    {
+        // Update FPS and render time buffers
+        fpsBuffer[currentIndex] = currentFPS;
+        renderTimeBuffer[currentIndex] = renderTime / 1000.0f;
+
+        // Move to the next index in the circular buffer
+        currentIndex = (currentIndex + 1) % bufferSize;
+    }
+
+    void RenderGraphs()
+    {
+        ImGui::PlotLines("FPS Over Time", fpsBuffer.data(), bufferSize, currentIndex, "FPS", 0.0, 100.0, ImVec2(0, 80));
+        ImGui::PlotLines("Render Time Over Time", renderTimeBuffer.data(), bufferSize, currentIndex, "ms", 0.0, 50.0, ImVec2(0, 80));
+    }
+
+private:
+    int bufferSize;
+    int currentIndex = 0;
+    std::vector<float> fpsBuffer;
+    std::vector<float> renderTimeBuffer;
+};
 
 ////////////////////////////////////////////////////////////
 
@@ -30,15 +65,16 @@ float lagMultiplier = 1.f;
 int counter = 0;
 int counter2 = 0;
 int frameCount = 0;
+FrameStats frameStats = FrameStats(1000);
 bool perFrame(int lastFrameTime)
 {
+    frameStats.Update(lastFrameTime, 1000000.0 / lastFrameTime);
     frameCount++;
 
     // WindowA
     if (isWindowAOpen)
     {
         ImGui::Begin("CDearImGui", &isWindowAOpen);
-        
     }
 
     // WindowB
@@ -55,10 +91,10 @@ bool perFrame(int lastFrameTime)
         ImGui::Text("FPS: %s", fps);
         ImGui::Text("Frame Count: %i", frameCount);
         ImGui::Separator();
-        if (ImGui::Button("Lag!"))
-            lag = !lag;
-        ImGui::SliderInt("Lag Amount", &lagAmount, 10000, 100000);
+        ImGui::Checkbox("Lag!", &lag);
+        ImGui::SliderInt("Lag Amount", &lagAmount, 100000, 1000000);
         ImGui::SliderFloat("Lag Multiplier", &lagMultiplier, 0.5f, 100.f);
+        frameStats.RenderGraphs();
         ImGui::End();
 
         if (lag)
