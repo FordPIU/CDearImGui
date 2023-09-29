@@ -24,6 +24,9 @@ std::string getFramePerSecond(int lastFrameTime)
 
 bool isWindowAOpen = true;
 bool isWindowBOpen = true;
+bool lag;
+int lagAmount = 10000;
+float lagMultiplier = 1.f;
 int counter = 0;
 int counter2 = 0;
 int frameCount = 0;
@@ -34,12 +37,8 @@ bool perFrame(int lastFrameTime)
     // WindowA
     if (isWindowAOpen)
     {
-        ImGui::Begin("Window A", &isWindowAOpen);
-        ImGui::Text("Hello, world!");
-        if (ImGui::Button("Count!"))
-            counter++;
-        ImGui::Text("counter = %d", counter);
-        ImGui::End();
+        ImGui::Begin("CDearImGui", &isWindowAOpen);
+        
     }
 
     // WindowB
@@ -51,14 +50,25 @@ bool perFrame(int lastFrameTime)
         const char *fps = sFps.c_str();
 
         // ImGui Rendering
-        ImGui::Begin("Window B", &isWindowBOpen);
-        ImGui::Text("Hello, world 2!");
-        if (ImGui::Button("Count!"))
-            counter2 += 5;
-        ImGui::Text("counter = %d", counter2);
+        ImGui::Begin("Timings Debug", &isWindowBOpen);
         ImGui::Text("Render Time: %s", renderTime);
         ImGui::Text("FPS: %s", fps);
         ImGui::Text("Frame Count: %i", frameCount);
+        ImGui::Separator();
+        if (ImGui::Button("Lag!"))
+            lag = !lag;
+        ImGui::SliderInt("Lag Amount", &lagAmount, 10000, 100000);
+        ImGui::SliderFloat("Lag Multiplier", &lagMultiplier, 0.5f, 100.f);
+        ImGui::End();
+
+        if (lag)
+        {
+            int value = 0;
+            for (int i = 0; i < (lagAmount * lagMultiplier); ++i)
+            {
+                value = static_cast<int>(std::sqrt(value * i));
+            }
+        }
         ImGui::End();
     }
 
