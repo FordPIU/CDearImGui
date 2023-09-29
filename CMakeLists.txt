@@ -1,5 +1,5 @@
 # Minimum CMake version required
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.27)
 
 # Project information
 project(CDearImGui 
@@ -14,6 +14,10 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED True)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Setup VCPKG link
+set(VCPKG_TARGET_TRIPLET "x86-windows" CACHE STRING "")
+set(CMAKE_TOOLCHAIN_FILE "D:/Github/CDearImGui/vcpkg/scripts/buildsystems/vcpkg.cmake")
+
 # Include directories
 set(INCLUDE_DIRS
     include
@@ -25,14 +29,22 @@ include_directories(${INCLUDE_DIRS})
 
 # Gather source files
 file(GLOB SOURCES 
-    "src/*.cpp"
-    "src/**/*.cpp"
+    "${CMAKE_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_SOURCE_DIR}/src/**/*.cpp"
+)
+
+# Add GLFW DLL
+configure_file(
+    "${CMAKE_SOURCE_DIR}/dll_files/glfw3.dll"
+    "${CMAKE_BINARY_DIR}/Debug/glfw3.dll"
+    COPYONLY
 )
 
 # Create the executable target
 add_executable(CDearImGui ${SOURCES})
 
 # Find and link GLFW
+set(glfw3_DIR "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glfw3")
 find_package(glfw3 CONFIG REQUIRED)
 if (glfw3_FOUND)
     target_link_libraries(CDearImGui PRIVATE glfw)
@@ -41,6 +53,7 @@ else ()
 endif ()
 
 # Find and link GLAD
+set(glad_DIR "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glad")
 find_package(glad CONFIG REQUIRED)
 if (glad_FOUND)
     target_link_libraries(CDearImGui PRIVATE glad::glad)
