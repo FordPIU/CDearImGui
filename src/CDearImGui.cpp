@@ -1,4 +1,4 @@
-#include "ProcessManager.h"
+#include "Process.h"
 #include "Timer.h"
 
 #include <windows.h>
@@ -26,8 +26,11 @@ bool isWindowAOpen = true;
 bool isWindowBOpen = true;
 int counter = 0;
 int counter2 = 0;
+int frameCount = 0;
 bool perFrame(int lastFrameTime)
 {
+    frameCount++;
+
     // WindowA
     if (isWindowAOpen)
     {
@@ -55,6 +58,7 @@ bool perFrame(int lastFrameTime)
         ImGui::Text("counter = %d", counter2);
         ImGui::Text("Render Time: %s", renderTime);
         ImGui::Text("FPS: %s", fps);
+        ImGui::Text("Frame Count: %i", frameCount);
         ImGui::End();
     }
 
@@ -71,7 +75,7 @@ bool perFrame(int lastFrameTime)
 
 int main()
 {
-    ProcessManager proccess = ProcessManager(perFrame);
+    Process proccess = Process(perFrame);
     proccess.launch(1, 1, "Hello World!", 0, 0, rgbaVec(0.f, 0.f, 0.f, 0.f));
 }
 

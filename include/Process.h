@@ -1,9 +1,7 @@
 #pragma once
 
-#ifndef PROCCESS_MANAGER_H
-#define PROCCESS_MANAGER_H
-#include <stdexcept>
-
+#ifndef PROCESS_H
+#define PROCESS_H
 #include "ColorVectors.h"
 #include "Timer.h"
 
@@ -14,14 +12,14 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
-#endif // PROCCESS_MANAGER_H
+#endif // PROCESS_H
 
 typedef bool (*FunctionPointer)(int);
 
-class ProcessManager
+class Process
 {
 public:
-    ProcessManager(FunctionPointer frameFunction)
+    Process(FunctionPointer frameFunction)
     {
         frameCallFunc = frameFunction;
     }
@@ -36,16 +34,16 @@ public:
         glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 
         // Create Window
-        proccessWindow = glfwCreateWindow(winWidth, winHeight, winName, nullptr, nullptr);
+        processWindow = glfwCreateWindow(winWidth, winHeight, winName, nullptr, nullptr);
 
-        if (proccessWindow == nullptr)
+        if (processWindow == nullptr)
         {
             glfwTerminate();
             throw std::runtime_error("GLFW Window Creation Failed.");
         }
 
         // Set Context
-        glfwMakeContextCurrent(proccessWindow);
+        glfwMakeContextCurrent(processWindow);
 
         // Initalize OpenGL
         gladLoadGL();
@@ -63,13 +61,13 @@ public:
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-        ImGui_ImplGlfw_InitForOpenGL(proccessWindow, true);
+        ImGui_ImplGlfw_InitForOpenGL(processWindow, true);
         ImGui_ImplOpenGL3_Init("#version 460");
 
         // Last frames duration / completion time
         int last_frame_duration = 0;
 
-        while (!glfwWindowShouldClose(proccessWindow))
+        while (!glfwWindowShouldClose(processWindow) && !windowTerminate)
         {
             // Start a timer
             Timer timer = Timer();
@@ -88,13 +86,13 @@ public:
             //   requested to close the window
             if (shouldClose)
             {
-                glfwSetWindowShouldClose(proccessWindow, GLFW_TRUE);
+                glfwSetWindowShouldClose(processWindow, GLFW_TRUE);
             }
 
             // // Handle per-frame de-initalization
             // Update the viewport for resizing to take effect
             int display_w, display_h;
-            glfwGetFramebufferSize(proccessWindow, &display_w, &display_h);
+            glfwGetFramebufferSize(processWindow, &display_w, &display_h);
             glViewport(0, 0, display_w, display_h);
 
             // Set the window background, or else flickering occurs
@@ -110,7 +108,7 @@ public:
                 ImGui::RenderPlatformWindowsDefault();
             }
 
-            glfwSwapBuffers(proccessWindow);
+            glfwSwapBuffers(processWindow);
 
             // End the timer, and set frame duration
             last_frame_duration = timer.endTimer();
@@ -120,11 +118,18 @@ public:
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
 
-        glfwDestroyWindow(proccessWindow);
+        glfwDestroyWindow(processWindow);
         glfwTerminate();
     }
 
+    void terminate()
+    {
+        windowTerminate = true;
+    }
+
 private:
-    GLFWwindow *proccessWindow;
+    GLFWwindow *processWindow;
     FunctionPointer frameCallFunc;
+
+    bool windowTerminate = false;
 };
