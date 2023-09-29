@@ -1,24 +1,17 @@
 #pragma once
 
-#ifndef COLOR_VECTORS
-#define COLOR_VECTORS
+#ifndef COLOR_VECTORS_H
+#define COLOR_VECTORS_H
 #include <algorithm>
-#endif
+#endif // COLOR_VECTORS_H
 
 class rgbVec
 {
 public:
-    rgbVec(float red, float green, float blue)
+    rgbVec(float red, float green, float blue) : r(std::clamp(red, 0.f, 255.f)),
+                                                 g(std::clamp(green, 0.f, 255.f)),
+                                                 b(std::clamp(blue, 0.f, 255.f))
     {
-        // Min & Max Checks
-        red = std::clamp(red, 0.f, 255.f);
-        green = std::clamp(green, 0.f, 255.f);
-        blue = std::clamp(blue, 0.f, 255.f);
-
-        // Sets
-        r = red;
-        g = green;
-        b = blue;
     }
 
     float r = 0.f;
@@ -29,19 +22,11 @@ public:
 class rgbaVec
 {
 public:
-    rgbaVec(float red, float green, float blue, float alpha)
+    rgbaVec(float red, float green, float blue, float alpha) : r(std::clamp(red, 0.f, 255.f)),
+                                                               g(std::clamp(green, 0.f, 255.f)),
+                                                               b(std::clamp(blue, 0.f, 255.f)),
+                                                               a(std::clamp(alpha, 0.f, 255.f))
     {
-        // Min & Max Checks
-        red = std::clamp(red, 0.f, 255.f);
-        green = std::clamp(green, 0.f, 255.f);
-        blue = std::clamp(blue, 0.f, 255.f);
-        alpha = std::clamp(alpha, 0.f, 255.f);
-
-        // Sets
-        r = red;
-        g = green;
-        b = blue;
-        a = alpha;
     }
 
     float r = 0.f;

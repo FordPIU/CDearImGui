@@ -8,6 +8,9 @@ project(CDearImGui
     LANGUAGES C CXX
 )
 
+# Set Project Production State (toggles console)
+set(IS_PROD FALSE)
+
 # Set C & C++ standard to C++23
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_CXX_STANDARD 23)
@@ -41,7 +44,11 @@ configure_file(
 )
 
 # Create the executable target
-add_executable(CDearImGui ${SOURCES})
+if (IS_PROD)
+    add_executable(CDearImGui WIN32 ${SOURCES})
+else ()
+    add_executable(CDearImGui ${SOURCES})
+endif ()
 
 # Find and link GLFW
 set(glfw3_DIR "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glfw3")

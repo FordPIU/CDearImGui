@@ -1,10 +1,11 @@
 #pragma once
 
-#ifndef PROCCESS_MANAGER
-#define PROCCESS_MANAGER
+#ifndef PROCCESS_MANAGER_H
+#define PROCCESS_MANAGER_H
 #include <stdexcept>
 
 #include "ColorVectors.h"
+#include "Timer.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -13,13 +14,16 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
-#endif
+#endif // PROCCESS_MANAGER_H
+
+typedef bool (*FunctionPointer)(int);
 
 class ProcessManager
 {
 public:
-    ProcessManager()
+    ProcessManager(FunctionPointer frameFunction)
     {
+        frameCallFunc = frameFunction;
     }
 
     void launch(int winWidth, int winHeight, const char *winName, int winPosX, int winPosY, rgbaVec winBkgRGBA)
@@ -61,8 +65,66 @@ public:
 
         ImGui_ImplGlfw_InitForOpenGL(proccessWindow, true);
         ImGui_ImplOpenGL3_Init("#version 460");
+
+        // Last frames duration / completion time
+        int last_frame_duration = 0;
+
+        while (!glfwWindowShouldClose(proccessWindow))
+        {
+            // Start a timer
+            Timer timer = Timer();
+
+            // Handle per-frame initialization
+            glfwPollEvents();
+
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            // Call the per frame function
+            bool shouldClose = frameCallFunc(last_frame_duration);
+
+            // Check if the per frame function
+            //   requested to close the window
+            if (shouldClose)
+            {
+                glfwSetWindowShouldClose(proccessWindow, GLFW_TRUE);
+            }
+
+            // // Handle per-frame de-initalization
+            // Update the viewport for resizing to take effect
+            int display_w, display_h;
+            glfwGetFramebufferSize(proccessWindow, &display_w, &display_h);
+            glViewport(0, 0, display_w, display_h);
+
+            // Set the window background, or else flickering occurs
+            glClearColor(winBkgRGBA.r, winBkgRGBA.g, winBkgRGBA.b, winBkgRGBA.a);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+            {
+                ImGui::UpdatePlatformWindows();
+                ImGui::RenderPlatformWindowsDefault();
+            }
+
+            glfwSwapBuffers(proccessWindow);
+
+            // End the timer, and set frame duration
+            last_frame_duration = timer.endTimer();
+        }
+
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+
+        glfwDestroyWindow(proccessWindow);
+        glfwTerminate();
     }
 
 private:
     GLFWwindow *proccessWindow;
+    FunctionPointer frameCallFunc;
 };
