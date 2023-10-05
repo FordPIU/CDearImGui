@@ -1,115 +1,147 @@
 #include "Process.h"
 #include "Timer.h"
+#include "ServerBridge.h"
 
 #include <windows.h>
 #include <vector>
+#include <cmath>
 
 ////////////////////////////////////////////////////////////
 
-class FrameStats
+bool MainWindow_IsOpen = true;
+int status_ServerConnection = 0;
+bool popup_newServerConnection = false;
+char inbuf_newServerConnection[16] = "";
+
+void connectToServer(char *serverIp)
 {
-public:
-    FrameStats(int bufferSize) : bufferSize(bufferSize)
+    status_ServerConnection = 1;
+
+    int connectionStatus = ServerBridge::ConnectToServer(serverIp);
+
+    switch (connectionStatus)
     {
-        fpsBuffer.resize(bufferSize, 0.0);
-        renderTimeBuffer.resize(bufferSize, 0.0);
+    case 0:
+        std::cout << "Connection Successful!" << std::endl;
+
+    case 1:
+        status_ServerConnection = 2;
+    case 2:
+        status_ServerConnection = 3;
+    case 3:
+        status_ServerConnection = 3;
+    case 4:
+        status_ServerConnection = 3;
+    case 5:
+        status_ServerConnection = 4;
     }
-
-    void Update(float renderTime, double currentFPS)
-    {
-        // Update FPS and render time buffers
-        fpsBuffer[currentIndex] = currentFPS;
-        renderTimeBuffer[currentIndex] = renderTime / 1000.0f;
-
-        // Move to the next index in the circular buffer
-        currentIndex = (currentIndex + 1) % bufferSize;
-    }
-
-    void RenderGraphs()
-    {
-        ImGui::PlotLines("FPS Over Time", fpsBuffer.data(), bufferSize, currentIndex, "FPS", 0.0, 100.0, ImVec2(0, 80));
-        ImGui::PlotLines("Render Time Over Time", renderTimeBuffer.data(), bufferSize, currentIndex, "ms", 0.0, 50.0, ImVec2(0, 80));
-    }
-
-private:
-    int bufferSize;
-    int currentIndex = 0;
-    std::vector<float> fpsBuffer;
-    std::vector<float> renderTimeBuffer;
-};
-
-////////////////////////////////////////////////////////////
-
-std::string getRenderTime(int lastFrameTime)
-{
-    std::string renderTime_String = TimerFuncs::convertTime(lastFrameTime);
-
-    return renderTime_String;
 }
 
-std::string getFramePerSecond(int lastFrameTime)
+void menuBar()
 {
-    double lastFrameFPS = 1000000.0 / lastFrameTime;
-    std::string fps_String = std::to_string(lastFrameFPS);
+    if (ImGui::BeginMenuBar())
+    {
+        // CONNECTION
+        if (ImGui::BeginMenu("Connect"))
+        {
+            ImGui::MenuItem("Connect to New Server", NULL, &popup_newServerConnection);
+            if (ImGui::BeginMenu("Connection History"))
+            {
+                // Inject all previously connected servers
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenu();
+        }
 
-    return fps_String;
+        // ABOUT
+        if (ImGui::BeginMenu("About"))
+        {
+            // GITHUB
+            if (ImGui::Button("Project Github"))
+            {
+                std::string url = "https://github.com/FordPIU/CDearImGui";
+                std::wstring wideUrl(url.begin(), url.end());
+                ShellExecuteW(NULL, L"open", wideUrl.c_str(), NULL, NULL, SW_SHOWNORMAL);
+            }
+
+            // CREATORS
+            if (ImGui::BeginMenu("Creator(s)"))
+            {
+                ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.8f, 1.f), "Caleb Brodock");
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenuBar();
+    }
+
+    // Popups
+    if (popup_newServerConnection)
+    {
+        ImGui::OpenPopup("Server IP");
+        if (ImGui::BeginPopupModal("Server IP"))
+        {
+            ImGui::InputText("##InputField", inbuf_newServerConnection, IM_ARRAYSIZE(inbuf_newServerConnection));
+
+            if (ImGui::Button("OK"))
+            {
+                strcpy_s(inbuf_newServerConnection, "");
+                popup_newServerConnection = false;
+                ImGui::CloseCurrentPopup();
+
+                connectToServer(inbuf_newServerConnection);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Cancel"))
+            {
+                popup_newServerConnection = false;
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+    }
 }
 
-////////////////////////////////////////////////////////////
-
-bool isWindowAOpen = true;
-bool isWindowBOpen = true;
-bool lag;
-int lagAmount = 10000;
-float lagMultiplier = 1.f;
-int counter = 0;
-int counter2 = 0;
-int frameCount = 0;
-FrameStats frameStats = FrameStats(1000);
 bool perFrame(int lastFrameTime)
 {
-    frameStats.Update(lastFrameTime, 1000000.0 / lastFrameTime);
-    frameCount++;
-
-    // WindowA
-    if (isWindowAOpen)
+    if (MainWindow_IsOpen)
     {
-        ImGui::Begin("CDearImGui", &isWindowAOpen);
-    }
+        // Begin ImGui Instance
+        ImGui::Begin("CDearImGui", &MainWindow_IsOpen, ImGuiWindowFlags_MenuBar);
 
-    // WindowB
-    if (isWindowBOpen)
-    {
-        std::string sRenderTime = getRenderTime(lastFrameTime);
-        std::string sFps = getFramePerSecond(lastFrameTime);
-        const char *renderTime = sRenderTime.c_str();
-        const char *fps = sFps.c_str();
+        // Begin the Menu Bar
+        menuBar();
 
-        // ImGui Rendering
-        ImGui::Begin("Timings Debug", &isWindowBOpen);
-        ImGui::Text("Render Time: %s", renderTime);
-        ImGui::Text("FPS: %s", fps);
-        ImGui::Text("Frame Count: %i", frameCount);
-        ImGui::Separator();
-        ImGui::Checkbox("Lag!", &lag);
-        ImGui::SliderInt("Lag Amount", &lagAmount, 100000, 1000000);
-        ImGui::SliderFloat("Lag Multiplier", &lagMultiplier, 0.5f, 100.f);
-        frameStats.RenderGraphs();
-        ImGui::End();
+        // Center Connect Status
+        ImVec2 textSize = ImGui::CalcTextSize("Not connected to a server...");
+        float windowWidth = ImGui::GetWindowWidth();
+        float centerX = (windowWidth - textSize.x) * 0.5f;
+        ImGui::SetCursorPosX(centerX);
 
-        if (lag)
+        switch (status_ServerConnection)
         {
-            int value = 0;
-            for (int i = 0; i < (lagAmount * lagMultiplier); ++i)
-            {
-                value = static_cast<int>(std::sqrt(value * i));
-            }
+        case 0:
+            ImGui::TextColored(ImVec4(1.f, 0.5f, 0.5f, 1.f), "Not connected to a server.");
+            break;
+        case 1:
+            ImGui::TextColored(ImVec4(0.5f, 1.f, 1.f, 1.f), "Connecting...");
+            break;
+        case 2:
+            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.f), "Invalid IP Address Entered!");
+            break;
+        case 3:
+            ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "An error occured whilst connecting.");
+            break;
+        case 4:
+            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.f), "Server is not responding...");
+            break;
         }
+
         ImGui::End();
     }
 
-    // Check if both windows are closed
-    if (!isWindowAOpen && !isWindowBOpen)
+    if (!MainWindow_IsOpen)
     {
         return true;
     }
