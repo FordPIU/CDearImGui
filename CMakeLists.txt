@@ -43,6 +43,14 @@ configure_file(
     COPYONLY
 )
 
+# Add JSON DLL
+configure_file(
+    "${CMAKE_SOURCE_DIR}/dll_files/jsoncpp.dll"
+    "${CMAKE_BINARY_DIR}/Debug/jsoncpp.dll"
+    COPYONLY
+)
+
+
 # Create the executable target
 if (IS_PROD)
     add_executable(CDearImGui WIN32 ${SOURCES})
@@ -66,6 +74,15 @@ if (glad_FOUND)
     target_link_libraries(CDearImGui PRIVATE glad::glad)
 else ()
     message(FATAL_ERROR "GLAD not found!")
+endif ()
+
+# Find and link Json CPP
+set(jsoncpp_DIR "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/jsoncpp")
+find_package(jsoncpp CONFIG REQUIRED)
+if (jsoncpp_FOUND)
+    target_link_libraries(CDearImGui PRIVATE JsonCpp::JsonCpp)
+else ()
+    message(FATAL_ERROR "jsoncpp not found!")
 endif ()
 
 # Link Windows 32 Lib

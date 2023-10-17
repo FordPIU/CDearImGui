@@ -1,6 +1,7 @@
 #include "Process.h"
 #include "Timer.h"
 #include "ServerBridge.h"
+#include "StorageManager.h"
 
 #include <windows.h>
 #include <vector>
@@ -9,47 +10,17 @@
 ////////////////////////////////////////////////////////////
 
 bool MainWindow_IsOpen = true;
-int status_ServerConnection = 0;
-bool popup_newServerConnection = false;
-char inbuf_newServerConnection[16] = "";
-
-void connectToServer(char *serverIp)
-{
-    status_ServerConnection = 1;
-
-    int connectionStatus = ServerBridge::ConnectToServer(serverIp);
-
-    switch (connectionStatus)
-    {
-    case 0:
-        std::cout << "Connection Successful!" << std::endl;
-
-    case 1:
-        status_ServerConnection = 2;
-    case 2:
-        status_ServerConnection = 3;
-    case 3:
-        status_ServerConnection = 3;
-    case 4:
-        status_ServerConnection = 3;
-    case 5:
-        status_ServerConnection = 4;
-    }
-}
+bool popup_newBridgeConnection = false;
+char inbuf_serverIp[16] = "";
 
 void menuBar()
 {
     if (ImGui::BeginMenuBar())
     {
         // CONNECTION
-        if (ImGui::BeginMenu("Connect"))
+        if (ImGui::BeginMenu("Bridge"))
         {
-            ImGui::MenuItem("Connect to New Server", NULL, &popup_newServerConnection);
-            if (ImGui::BeginMenu("Connection History"))
-            {
-                // Inject all previously connected servers
-                ImGui::EndMenu();
-            }
+            ImGui::MenuItem("Add New Bridge", NULL, &popup_newBridgeConnection);
             ImGui::EndMenu();
         }
 
@@ -59,8 +30,8 @@ void menuBar()
             // GITHUB
             if (ImGui::Button("Project Github"))
             {
-                std::string url = "https://github.com/FordPIU/CDearImGui";
-                std::wstring wideUrl(url.begin(), url.end());
+                string url = "https://github.com/FordPIU/CDearImGui";
+                wstring wideUrl(url.begin(), url.end());
                 ShellExecuteW(NULL, L"open", wideUrl.c_str(), NULL, NULL, SW_SHOWNORMAL);
             }
 
@@ -76,30 +47,52 @@ void menuBar()
     }
 
     // Popups
-    if (popup_newServerConnection)
+    if (popup_newBridgeConnection)
     {
         ImGui::OpenPopup("Server IP");
         if (ImGui::BeginPopupModal("Server IP"))
         {
-            ImGui::InputText("##InputField", inbuf_newServerConnection, IM_ARRAYSIZE(inbuf_newServerConnection));
+            ImGui::InputText("##InputField", inbuf_serverIp, IM_ARRAYSIZE(inbuf_serverIp));
 
             if (ImGui::Button("OK"))
             {
-                strcpy_s(inbuf_newServerConnection, "");
-                popup_newServerConnection = false;
-                ImGui::CloseCurrentPopup();
+                StorageManager::SaveIPAddress(inbuf_serverIp);
 
-                connectToServer(inbuf_newServerConnection);
+                strcpy_s(inbuf_serverIp, "");
+                popup_newBridgeConnection = false;
+                ImGui::CloseCurrentPopup();
             }
             ImGui::SameLine();
             if (ImGui::Button("Cancel"))
             {
-                popup_newServerConnection = false;
+                popup_newBridgeConnection = false;
                 ImGui::CloseCurrentPopup();
             }
 
             ImGui::EndPopup();
         }
+    }
+}
+
+void serverList()
+{
+    vector<const char *> ipAddresss = StorageManager::GetIPAddressList();
+
+    // If no bridge connections have been added, we can simply return.
+    if (ipAddresss.empty())
+    {
+        ImVec2 textSize = ImGui::CalcTextSize("No Bridges have been added.");
+        float windowWidth = ImGui::GetWindowWidth();
+        float centerX = (windowWidth - textSize.x) * 0.5f;
+        ImGui::SetCursorPosX(centerX);
+        ImGui::TextColored(ImVec4(1.f, 0.5f, 0.5f, 1.f), "No Bridges have been added.");
+        return;
+    }
+
+    // Draw out every bridge's section
+    for (const auto &bridgeIp : ipAddresss)
+    {
+        cout << bridgeIp << endl;
     }
 }
 
@@ -113,30 +106,8 @@ bool perFrame(int lastFrameTime)
         // Begin the Menu Bar
         menuBar();
 
-        // Center Connect Status
-        ImVec2 textSize = ImGui::CalcTextSize("Not connected to a server...");
-        float windowWidth = ImGui::GetWindowWidth();
-        float centerX = (windowWidth - textSize.x) * 0.5f;
-        ImGui::SetCursorPosX(centerX);
-
-        switch (status_ServerConnection)
-        {
-        case 0:
-            ImGui::TextColored(ImVec4(1.f, 0.5f, 0.5f, 1.f), "Not connected to a server.");
-            break;
-        case 1:
-            ImGui::TextColored(ImVec4(0.5f, 1.f, 1.f, 1.f), "Connecting...");
-            break;
-        case 2:
-            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.f), "Invalid IP Address Entered!");
-            break;
-        case 3:
-            ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "An error occured whilst connecting.");
-            break;
-        case 4:
-            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.f), "Server is not responding...");
-            break;
-        }
+        // Server List
+        serverList();
 
         ImGui::End();
     }
@@ -154,7 +125,7 @@ bool perFrame(int lastFrameTime)
 int main()
 {
     Process proccess = Process(perFrame);
-    proccess.launch(1, 1, "Hello World!", 0, 0, rgbaVec(0.f, 0.f, 0.f, 0.f));
+    proccess.launch(1, 1, "CDearImGui", 0, 0, rgbaVec(0.f, 0.f, 0.f, 0.f));
 }
 
 ////////////////////////////////////////////////////////////
