@@ -76,7 +76,7 @@ void menuBar()
 
 void serverList()
 {
-    vector<const char *> ipAddresss = StorageManager::GetIPAddressList();
+    vector<string> ipAddresss = StorageManager::GetIPAddressList();
 
     // If no bridge connections have been added, we can simply return.
     if (ipAddresss.empty())
@@ -90,9 +90,10 @@ void serverList()
     }
 
     // Draw out every bridge's section
-    for (const auto &bridgeIp : ipAddresss)
+    for (const string &bridgeIp : ipAddresss)
     {
-        cout << bridgeIp << endl;
+        ImGui::NewLine();
+        ImGui::Text("%s", bridgeIp.c_str());
     }
 }
 
