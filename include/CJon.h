@@ -11,9 +11,18 @@
 using namespace std;
 namespace fs = filesystem;
 
+/// @brief CJon is a lightweight variant of JSON, utilizing maps.
 class CJon
 {
 public:
+#pragma region CONSTRUCTORS
+    /// @brief Constructor for a CJon object.
+    /// @param dataHeaderName Header name for the data. File containing this data will save saved as this.
+    /// @param saveOnDeconstruct OPTIONAL if the file should save on deconstruction. Defaults to true, useful if you want to quickly access data without writing the file.
+    /// @example CJon myData = CJon("myData");
+    /// @author Caleb Brodock
+    /// @version 1
+    /// @date 10/18/2023
     CJon(const string &dataHeaderName, const bool &saveOnDeconstruct = true)
     {
         this->cjonName = dataHeaderName;
@@ -22,25 +31,48 @@ public:
 
         loadData();
     }
+
+    /// @brief Deconstructor for a CJon object. Simply saves the data if save on deconstruction is on.
+    /// @author Caleb Brodock
+    /// @version 1
+    /// @date 10/18/2023
     ~CJon()
     {
         if (this->saveOnDecon)
             saveData();
     }
+#pragma endregion
 
-    // KVP
+#pragma region ADD
+    /// @brief Add a Key Value Pair to the CJon.
+    /// @param key
+    /// @param value
+    /// @author Caleb Brodock
+    /// @version 1
+    /// @date 10/18/2023
     void addKVPair(const string &key, const string &value)
     {
         this->cjonMap[key] = value;
     }
 
-    // IV
+    /// @brief Add a iterating value to the CJon.
+    /// @param value
+    /// @author Caleb Brodock
+    /// @version 1
+    /// @date 10/18/2023
     void addValue(const string &value)
     {
         int iterator = this->cjonMap.size();
         this->cjonMap[to_string(iterator)] = value;
     }
+#pragma endregion
 
+#pragma region GET
+    /// @brief Get all keys in the CJon
+    /// @return CJon Keys
+    /// @author Caleb Brodock
+    /// @version 1
+    /// @date 10/18/2023
     vector<string> getKeys()
     {
         vector<string> keys;
@@ -53,6 +85,11 @@ public:
         return keys;
     }
 
+    /// @brief Get all values in the CJon
+    /// @return CJon Values
+    /// @author Caleb Brodock
+    /// @version 1
+    /// @date 10/18/2023
     vector<string> getValues()
     {
         vector<string> values;
@@ -64,13 +101,21 @@ public:
 
         return values;
     }
+#pragma endregion
 
 private:
+#pragma region VARIABLES
     map<string, string> cjonMap;
     string cjonName;
     string filePath;
     bool saveOnDecon = true;
+#pragma endregion
 
+#pragma region SAVE/LOAD
+    /// @brief Save the current CJon data.
+    /// @author Caleb Brodock
+    /// @version 1
+    /// @date 10/18/2023
     void saveData()
     {
         fs::create_directories(fs::path(this->filePath).parent_path());
@@ -90,8 +135,16 @@ private:
         cout << "Data saved to " << this->filePath << endl;
     }
 
-    void loadData()
+    /// @brief Load the current CJon data.
+    /// @param saveFirst OPTIONAL : default is false. If true, it'll save the current data before reloading the data.
+    /// @author Caleb Brodock
+    /// @version 1
+    /// @date 10/18/2023
+    void loadData(bool saveFirst = false)
     {
+        if (saveFirst)
+            saveData();
+
         ifstream file(this->filePath);
         if (!file.is_open())
         {
@@ -126,4 +179,5 @@ private:
 
         cout << "Data loaded from " << this->filePath << endl;
     }
+#pragma endregion
 };
