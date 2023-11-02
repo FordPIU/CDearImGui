@@ -17,19 +17,19 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Create Directories
+    - name: Install vcpkg
       run: |
-        mkdir -p "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glad"
-        mkdir -p "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glfw3"
+        git clone https://github.com/microsoft/vcpkg.git
+        cd vcpkg
+        bootstrap-vcpkg.bat
+        vcpkg integrate install
 
-    - name: Clone glad
-      run: git clone --depth=1 https://github.com/Dav1dde/glad.git "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glad"
-
-    - name: Clone GLFW
-      run: git clone --depth=1 https://github.com/glfw/glfw.git "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glfw3"
+    - name: Install glad and glfw3
+      run: |
+        vcpkg install glad glfw3
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake"
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
