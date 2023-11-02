@@ -138,6 +138,7 @@ namespace ServerBridge
 
     bool ConnectToBridge(std::string ip)
     {
+        //
         std::string returnFromServer = sendHttpRequest(ip, "/bridgeAlive");
 
         if (returnFromServer.contains("HTTP/1.1 200 OK"))
