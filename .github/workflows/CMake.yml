@@ -24,9 +24,13 @@ jobs:
         bootstrap-vcpkg.bat
         vcpkg integrate install
 
-    - name: Install glad and glfw3
+    - name: Install glad
       run: |
-        vcpkg install glad glfw3
+        vcpkg install glad
+        
+    - name: Install glfw3
+      run: |
+        vcpkg install glfw3
 
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake"
