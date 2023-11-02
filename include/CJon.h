@@ -1,17 +1,22 @@
 #pragma once
 
-#ifndef CJON_H
+#pragma region INCLUDES/NAMESPACE
 #include <iostream>
 #include <fstream>
 #include <map>
 #include <filesystem>
-#define CJON_H
-#endif
 
-using namespace std;
-namespace fs = filesystem;
+using std::ifstream;
+using std::map;
+using std::string;
+using std::vector;
+namespace fs = std::filesystem;
+#pragma endregion
 
 /// @brief CJon is a lightweight variant of JSON, utilizing maps.
+/// @author Caleb Brodock
+/// @version 1
+/// @date 10/18/2023
 class CJon
 {
 public:
@@ -63,7 +68,7 @@ public:
     void addValue(const string &value)
     {
         int iterator = this->cjonMap.size();
-        this->cjonMap[to_string(iterator)] = value;
+        this->cjonMap[std::to_string(iterator)] = value;
     }
 #pragma endregion
 
@@ -128,11 +133,11 @@ private:
         jsonString.pop_back();
         jsonString += "}";
 
-        ofstream file(this->filePath);
+        std::ofstream file(this->filePath);
         file << jsonString;
         file.close();
 
-        cout << "Data saved to " << this->filePath << endl;
+        std::cout << "Data saved to " << this->filePath << std::endl;
     }
 
     /// @brief Load the current CJon data.
@@ -148,17 +153,17 @@ private:
         ifstream file(this->filePath);
         if (!file.is_open())
         {
-            cerr << "Error opening file: " << this->filePath << endl;
+            std::cerr << "Error opening file: " << this->filePath << std::endl;
             return;
         }
 
-        stringstream buffer;
+        std::stringstream buffer;
         buffer << file.rdbuf();
         string jsonString = buffer.str();
 
         if (jsonString.empty() || jsonString == "{}")
         {
-            cout << "File is empty or does not contain valid JSON data." << endl;
+            std::cout << "File is empty or does not contain valid JSON data." << std::endl;
             return;
         }
 
@@ -167,9 +172,9 @@ private:
         size_t end = jsonString.rfind('}');
         string pairs = jsonString.substr(start, end - start);
 
-        stringstream ss(pairs);
+        std::stringstream ss(pairs);
         string pair;
-        while (getline(ss, pair, ','))
+        while (std::getline(ss, pair, ','))
         {
             size_t colonPos = pair.find(':');
             string key = pair.substr(1, colonPos - 2);
@@ -177,7 +182,7 @@ private:
             this->cjonMap[key] = value;
         }
 
-        cout << "Data loaded from " << this->filePath << endl;
+        std::cout << "Data loaded from " << this->filePath << std::endl;
     }
 #pragma endregion
 };

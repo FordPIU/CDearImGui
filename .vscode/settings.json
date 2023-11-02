@@ -89,7 +89,20 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "filesystem": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "any": "cpp",
+        "bitset": "cpp",
+        "execution": "cpp",
+        "memory_resource": "cpp",
+        "shared_mutex": "cpp",
+        "source_location": "cpp",
+        "typeindex": "cpp",
+        "variant": "cpp",
+        "coroutine": "cpp",
+        "csignal": "cpp",
+        "cwctype": "cpp",
+        "resumable": "cpp",
+        "strstream": "cpp"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }

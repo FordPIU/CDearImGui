@@ -1,11 +1,10 @@
 #pragma once
 
-#ifndef IM_GUI_THEMES_H
-#define IM_GUI_THEMES_H
+#pragma region INCLUDES/NAMESAPCE
 #include "imgui.h"
 #include <cmath>
 #include <algorithm>
-#endif // IM_GUI_THEMES_H
+#pragma endregion
 
 ImVec4 hueShift(const ImVec4 &color, float shift)
 {

@@ -31,7 +31,8 @@ void menuBar()
             if (ImGui::Button("Project Github"))
             {
                 string url = "https://github.com/FordPIU/CDearImGui";
-                wstring wideUrl(url.begin(), url.end());
+
+                std::wstring wideUrl(url.begin(), url.end());
                 ShellExecuteW(NULL, L"open", wideUrl.c_str(), NULL, NULL, SW_SHOWNORMAL);
             }
 
@@ -93,7 +94,9 @@ void serverList()
     for (const string &bridgeIp : ipAddresss)
     {
         ImGui::NewLine();
+        ImGui::BeginGroup();
         ImGui::Text("%s", bridgeIp.c_str());
+        ImGui::EndGroup();
     }
 }
 
