@@ -11,7 +11,14 @@ namespace StorageManager
     {
         CJon ipAddressArray = CJon("ipAddressList");
 
-        ipAddressArray.addValue(ipAddress);
+        ipAddressArray.addValueV2(ipAddress);
+    }
+
+    void RemoveIPAddress(std::string ipAddress)
+    {
+        CJon ipAddressArray = CJon("ipAddressList");
+
+        ipAddressArray.removeValue(ipAddress);
     }
 
     vector<string> GetIPAddressList()

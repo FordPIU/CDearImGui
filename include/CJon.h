@@ -65,10 +65,66 @@ public:
     /// @author Caleb Brodock
     /// @version 1
     /// @date 10/18/2023
+    /// @deprecated
     void addValue(const string &value)
     {
         int iterator = this->cjonMap.size();
         this->cjonMap[std::to_string(iterator)] = value;
+    }
+
+    /// @brief Add a iterating value to the CJon.
+    /// @param value
+    /// @author Caleb Brodock
+    /// @version 2
+    /// @date 11/1/2023
+    void addValueV2(const string &value)
+    {
+        int iterator = 0;
+
+        if (this->cjonMap.size() != 0)
+        {
+            try
+            {
+                int lastMember_iterator = std::stoi(this->cjonMap.rbegin()->first) + 1;
+
+                iterator = lastMember_iterator;
+            }
+            catch (const std::invalid_argument &ex)
+            {
+                iterator = this->cjonMap.size();
+            }
+            catch (const std::out_of_range &ex)
+            {
+                iterator = this->cjonMap.size();
+            }
+        }
+        else
+        {
+            iterator = 0;
+        }
+
+        this->cjonMap[std::to_string(iterator)] = value;
+    }
+#pragma endregion
+
+#pragma region REMOVE
+    /// @brief Remove a specific value within the CJon
+    /// @author Caleb Brodock
+    /// @version 2
+    /// @date 11/1/2023
+    void removeValue(const string &value)
+    {
+        auto it = this->cjonMap.begin();
+        while (it != this->cjonMap.end())
+        {
+            if (it->second == value)
+            {
+                it = this->cjonMap.erase(it);
+                return;
+            }
+
+            ++it;
+        }
     }
 #pragma endregion
 
@@ -182,7 +238,7 @@ private:
             this->cjonMap[key] = value;
         }
 
-        std::cout << "Data loaded from " << this->filePath << std::endl;
+        // std::cout << "Data loaded from " << this->filePath << std::endl;
     }
 #pragma endregion
 };
