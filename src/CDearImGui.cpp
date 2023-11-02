@@ -1,4 +1,4 @@
-#include "Process.h"
+#include "OpenGLProcess.h"
 #include "Timer.h"
 #include "ServerBridge.h"
 #include "StorageManager.h"
@@ -141,7 +141,12 @@ void serverList()
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.5f, 0.f, 1.0f));
             if (ImGui::Button("Connect", ImVec2(80.0f, 0.0f)))
             {
-                // LaunchBridge(bridgeIp);
+                bool connected = ServerBridge::ConnectToBridge(bridgeIp);
+
+                if (connected)
+                {
+                    // LaunchBridge(bridgeIp);
+                }
             }
             ImGui::PopStyleColor();
             ImGui::SameLine();
@@ -208,7 +213,7 @@ void serverStatusFunct()
             std::cout << "Server: " << bridgeIp << " Status: " << isConnected << std::endl;
         }
 
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
 }
 
