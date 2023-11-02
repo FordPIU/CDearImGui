@@ -12,47 +12,28 @@ env:
 
 jobs:
   build:
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install Dependencies
+    - name: Create Directories
       run: |
-        # Install Glad
-        git clone --depth=1 https://github.com/Dav1dde/glad.git
-        cd glad
-        cmake -Bbuild -S. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-        cmake --build build --config ${{env.BUILD_TYPE}}
-        # Copy glad library and include files to the expected directory
-        cp -r include "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/include"
-        cp build/src/glad.dll "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/bin"
-        cd ..
+        mkdir -p "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glad"
+        mkdir -p "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glfw3"
 
-        # Install GLFW3
-        git clone --depth=1 https://github.com/glfw/glfw.git
-        cd glfw
-        cmake -Bbuild -S. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-        cmake --build build --config ${{env.BUILD_TYPE}}
-        # Copy GLFW library and include files to the expected directory
-        cp -r include "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/include"
-        cp build/src/Release/glfw3.dll "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/bin"
-        cd ..
+    - name: Clone glad
+      run: git clone --depth=1 https://github.com/Dav1dde/glad.git "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glad"
+
+    - name: Clone GLFW
+      run: git clone --depth=1 https://github.com/glfw/glfw.git "${CMAKE_SOURCE_DIR}/vcpkg/installed/x64-windows/share/glfw3"
 
     - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
-      # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration.
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{env.BUILD_TYPE}}
